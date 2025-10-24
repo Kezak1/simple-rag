@@ -5,9 +5,9 @@ from langchain_community.vectorstores import Chroma
 import os
 import sys
 
-DATA_DIR = ""
-CHROMA_DIR = ""
-EMBED_MODEL = ""
+DATA_DIR = "../data"
+CHROMA_DIR = "../db"
+EMBED_MODEL = "nomic-embed-text"
 
 def load_docs() -> list:
     loders = [
