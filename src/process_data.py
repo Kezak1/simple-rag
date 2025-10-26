@@ -9,7 +9,7 @@ DATA_DIR = "../data"
 CHROMA_DIR = "../db"
 EMBED_MODEL = "nomic-embed-text"
 
-def load_docs() -> list:
+def load_docs():
     loders = [
         DirectoryLoader(DATA_DIR, glob="*.pdf", loader_cls=PyPDFLoader),
         DirectoryLoader(DATA_DIR, glob="*.txt", loader_cls=TextLoader),
