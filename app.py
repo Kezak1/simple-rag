@@ -5,13 +5,13 @@ from langchain_core.messages import AIMessage, HumanMessage
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
-from langchain_community.embeddings import OllamaEmbeddings
+from langchain_ollama import OllamaEmbeddings
 from langchain_chroma import Chroma
-from langchain_community.chat_models import ChatOllama
+from langchain_ollama import ChatOllama
 
-EMBED_MODEL = "nomic-embed-text"
+EMBED_MODEL = "bge-m3"
 LLM_MODEL = "llama3"
-DB_DIR = "../db"
+DB_DIR = "db"
 
 st.set_page_config(page_title="simple-rag assistant")
 st.title(f"{LLM_MODEL.capitalize()}")
@@ -135,9 +135,9 @@ if user_query:
             )
         st.markdown(answer)
 
-        if docs:
+        if docs and use_sources:
             with st.expander("Sources"):
                 for d in docs:
-                    st.write(f"• {source(d, use_sources)}")
+                    st.write(f"• {source(d)}")
 
     st.session_state.chat_history.append(AIMessage(content=answer))
