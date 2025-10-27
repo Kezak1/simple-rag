@@ -1,3 +1,2 @@
-src/.venv
-src/.env
 .venv
+db
