@@ -1,7 +1,7 @@
 # simple-rag
-Simple retrival-augmented generation. We use llama3 as main LLM to talk with AI. For embeddings we use bge-m3. (**Brutus**)
+Simple retrival-augmented generation (**Brutus**). We use llama3 as main LLM to talk with AI. For embeddings we use bge-m3.
 
-## funcionalities
+## functionalitues
 talk with AI about the specific documents.
 
 ![alt text](assets/image.png)
@@ -9,7 +9,7 @@ talk with AI about the specific documents.
 we can have custom paremeters for top-k retrived chunks, temperature of the AI and checkbox for give source.
 
 ## Setup with Docker
-**Disclaimer:** this process will take about 6 GB of your space. Also good to have good pc.
+**Disclaimer:** this process will take about 6 GB of your space. Recommend to have good pc.
 
 1. Have Docker
 2. Clone this repo
