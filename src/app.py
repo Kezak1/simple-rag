@@ -9,9 +9,10 @@ from langchain_ollama import OllamaEmbeddings
 from langchain_chroma import Chroma
 from langchain_ollama import ChatOllama
 
-EMBED_MODEL = "bge-m3"
-LLM_MODEL = "llama3"
-DB_DIR = "db"
+EMBED_MODEL = os.getenv("EMBED_MODEL", "bge-m3")
+LLM_MODEL = os.getenv("LLM_MODEL", "llama3")
+DB_DIR = os.getenv("DB_DIR", "db")
+OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 
 st.set_page_config(page_title="simple-rag assistant")
 st.title(f"{LLM_MODEL.capitalize()}")
@@ -67,12 +68,12 @@ def history_to_text(chat_history):
 def load_vectorstore():
     if not os.path.isdir(DB_DIR):
         st.warning(f"Chroma directory not found at: {DB_DIR}. Run your process_data.py first")
-    embeddings = OllamaEmbeddings(model=EMBED_MODEL)
+    embeddings = OllamaEmbeddings(model=EMBED_MODEL, base_url=OLLAMA_BASE_URL)
 
     return Chroma(persist_directory=DB_DIR, embedding_function=embeddings)
 
 def load_llm(temp: float):
-    return ChatOllama(model=LLM_MODEL, temperature=temp)
+    return ChatOllama(model=LLM_MODEL, temperature=temp, base_url=OLLAMA_BASE_URL)
 
 
 PROMPT = ChatPromptTemplate.from_template(
@@ -109,7 +110,6 @@ if "chat_history" not in st.session_state:
     st.session_state.chat_history = [
         AIMessage(content="Hi! I am simple RAG. What do you want?")
     ]
-
 
 vectorstore = load_vectorstore()
 

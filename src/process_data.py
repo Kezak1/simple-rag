@@ -2,14 +2,13 @@ from langchain_community.document_loaders import DirectoryLoader, PyPDFLoader, T
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_ollama import OllamaEmbeddings
 from langchain_community.vectorstores import Chroma
-from tqdm import tqdm
 import os
 import sys
 
-DATA_DIR = "data"
-CHROMA_DIR = "db"
-EMBED_MODEL = "bge-m3"
-BATCH_SIZE = 4
+DATA_DIR = os.getenv("DATA_DIR", "data")
+CHROMA_DIR = os.getenv("DB_DIR", "db")
+EMBED_MODEL = os.getenv("EMBED_MODEL", "bge-m3")
+OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 
 def load_docs():
     loaders = [
@@ -26,10 +25,6 @@ def load_docs():
 
     return docs
 
-def batched(seq, size):
-    for i in range(0, len(seq), size):
-        yield seq[i:i+size]
-
 def main():
     try:
         os.makedirs(CHROMA_DIR, exist_ok=True)
@@ -38,7 +33,10 @@ def main():
             print("No documents found in", DATA_DIR)
             sys.exit(0)
         
-        total_size = sum(len(doc.page_content) for doc in docs)
+        total_size = 0
+        for doc in docs:
+            total_size += len(doc.page_content)
+        
         if total_size > 100_000_000:
             print(f"Total document size ({total_size/1_000_000:.1f}MB) exceeds limit")
             sys.exit(1)
@@ -47,7 +45,7 @@ def main():
         chunks = splitter.split_documents(docs)
 
         print("Creating embeddings")
-        emb = OllamaEmbeddings(model=EMBED_MODEL)
+        emb = OllamaEmbeddings(model=EMBED_MODEL, base_url=OLLAMA_BASE_URL)
 
         try:
             _ = emb.embed_query("warmup")
@@ -61,6 +59,7 @@ def main():
             embedding=emb,                
             persist_directory=CHROMA_DIR, 
         )
+        
         print(f"Saved {len(chunks)} chunks to {CHROMA_DIR}")
     except Exception as e:
         print(f"Processing failed: {str(e)}")

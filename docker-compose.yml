@@ -1,0 +1,37 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"              
+    volumes:
+      - ollama:/root/.ollama         
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 5s
+      retries: 5
+      start_period: 10s
+      timeout: 5s
+
+  app:
+    build: .
+    container_name: simple-rag
+    depends_on:
+      ollama:
+        condition: service_healthy
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./data:/app/data
+      - ./db:/app/db
+    environment:
+      LLM_MODEL: llama3
+      EMBED_MODEL: bge-m3
+      DATA_DIR: data
+      DB_DIR: db
+      OLLAMA_BASE_URL: http://ollama:11434  
+    command: streamlit run src/app.py --server.address=0.0.0.0 --server.port=8501
+
+volumes:
+  ollama:

@@ -1,0 +1,33 @@
+# Don't include local data or database
+data/
+db/
+
+# Virtual environments
+.venv/
+env/
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Streamlit cache & temp files
+.streamlit/
+logs/
+*.log
+
+# System / IDE stuff
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Git
+.git/
+.gitignore
+
+# OS trash
+Thumbs.db
