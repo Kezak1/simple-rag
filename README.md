@@ -1,7 +1,7 @@
 # simple-rag
 Simple retrival-augmented generation (**Brutus**). We use llama3 as main LLM to talk with AI. For embeddings we use bge-m3.
 
-## functionalitues
+## functionalities
 talk with AI about the specific documents.
 
 ![alt text](assets/image.png)
