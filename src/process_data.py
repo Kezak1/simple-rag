@@ -1,4 +1,4 @@
-from langchain_community.document_loaders import DirectoryLoader, PyPDFLoader, TextLoader
+from langchain_community.document_loaders import DirectoryLoader, PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_ollama import OllamaEmbeddings
 from langchain_community.vectorstores import Chroma
@@ -54,7 +54,7 @@ def main():
             sys.exit(1)
 
         print("Saving to Chroma…")
-        db = Chroma.from_documents(
+        Chroma.from_documents(
             documents=chunks,           
             embedding=emb,                
             persist_directory=CHROMA_DIR, 
